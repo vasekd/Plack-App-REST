@@ -51,6 +51,7 @@ Please report any bugs or feature requests to github repository.
 # ACKNOWLEDGEMENTS
 
 Inspired by [https://github.com/towhans/hochschober](https://github.com/towhans/hochschober)
+
 Inspired by [https://github.com/nichtich/Plack-Middleware-REST](https://github.com/nichtich/Plack-Middleware-REST)
 
 # COPYRIGHT

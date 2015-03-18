@@ -129,6 +129,7 @@ Please report any bugs or feature requests to github repository.
 =head1 ACKNOWLEDGEMENTS
 
 Inspired by L<https://github.com/towhans/hochschober>
+
 Inspired by L<https://github.com/nichtich/Plack-Middleware-REST>
 
 =head1 COPYRIGHT
