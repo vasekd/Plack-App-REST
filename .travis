@@ -1,0 +1,13 @@
+language: perl
+perl:
+    - "5.20"
+    - "5.18"
+    - "5.16"
+
+install:
+    - cpanm -q -n --skip-satisfied Milla
+    - milla authordeps --missing | cpanm -n
+    - milla listdeps --missing | cpanm -n
+
+script:
+    - milla smoke --release --author

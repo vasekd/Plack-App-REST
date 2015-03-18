@@ -1,8 +1,14 @@
+#!perl -T
+use 5.006;
 use strict;
+use warnings FATAL => 'all';
+
 use Test::More;
-use Plack::App::REST;
 
-# replace with the actual test
-ok 1;
+plan tests => 1;
 
-done_testing;
+BEGIN {
+    use_ok( 'Plack::App::REST' ) || print "Bail out!\n";
+}
+
+diag( "Testing Plack::App::REST $Plack::App::REST::VERSION, Perl $], $^X" );
