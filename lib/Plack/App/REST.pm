@@ -4,27 +4,10 @@ use 5.008_005;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.01';
+our $VERSION = '0.01'; # Set automatically by milla
 
 use parent qw( Plack::Component );
-use Plack::Util;
 use HTTP::Exception '4XX';
-
-use Plack::Util::Accessor qw( via class handler );
-
-sub prepare_app {
-	my $self = shift;
-
-	die 'You must set "via" parameter.' unless $self->via;
-
-	# Try autoload class
-	my $file = $self->via;
-    $file =~ s!::!/!g;
-    eval{ require "$file.pm"; }; ## no critic
-
-	# Prepare object
-	$self->handler( $self->via->new() );
-}
 
 sub call {
 	my($self, $env) = @_;
@@ -32,7 +15,7 @@ sub call {
 	my $method = $env->{REQUEST_METHOD};
 
 	# Throw an exception if method is not defined
-	if (!$self->handler->can($method)){
+	if (!$self->can($method)){
 		HTTP::Exception::405->throw(message=>'Method Not Allowed');
 	}
 
@@ -42,7 +25,7 @@ sub call {
 	# compatibility with Plack::Middleware::ParseContent
 	my $data = $env->{'restapi.parseddata'} if exists $env->{'restapi.parseddata'};
 
-	my $ret = $self->handler->$method($env, $id, $data);
+	my $ret = $self->$method($env, $id, $data);
 	return $ret;
 }
 
@@ -70,17 +53,19 @@ Plack::App::REST - Perl PSGI App that just call http method from object.
 =head1 SYNOPSIS
 
 	use Plack::App::REST;
+	use Test::Root;
 
 	builder {
 		mount "/api" => builder {
-			mount "/" => Plack::App::REST->new(via => 'Test::Root');
+			mount "/" => Test::Root->new();
 		};
 	};
 
 	package Test::Root;
 	use parent 'Plack::App::REST';
 
-	sub GET {
+	sub POST {
+		my ($self, $env, $param, $data) = @_;
 		return [ 200, [ 'Content-Type' => 'text/plain' ], [ 'app/root' ] ];
 	}
 
@@ -140,7 +125,5 @@ Copyright 2015- Václav Dovrtěl
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
-
-=head1 SEE ALSO
 
 =cut

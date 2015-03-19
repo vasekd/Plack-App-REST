@@ -5,17 +5,19 @@ Plack::App::REST - Perl PSGI App that just call http method from object.
 # SYNOPSIS
 
         use Plack::App::REST;
+        use Test::Root;
 
         builder {
                 mount "/api" => builder {
-                        mount "/" => Plack::App::REST->new(via => 'Test::Root');
+                        mount "/" => Test::Root->new();
                 };
         };
 
         package Test::Root;
         use parent 'Plack::App::REST';
 
-        sub GET {
+        sub POST {
+                my ($self, $env, $param, $data) = @_;
                 return [ 200, [ 'Content-Type' => 'text/plain' ], [ 'app/root' ] ];
         }
 
@@ -62,5 +64,3 @@ Copyright 2015- Václav Dovrtěl
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
-
-# SEE ALSO

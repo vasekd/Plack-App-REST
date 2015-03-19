@@ -28,7 +28,7 @@ my $urlmap = Plack::App::URLMap->new;
 
 my $app = builder {
 		mount "/api" => builder {
-			mount '/' => Plack::App::REST->new( via => 'Test::Root' );
+			mount '/' => Test::Root->new();
 		};
 };
 
