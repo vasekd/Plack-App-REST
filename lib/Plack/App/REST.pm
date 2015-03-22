@@ -23,7 +23,7 @@ sub call {
 	my $id = _get_param($env);
 
 	# compatibility with Plack::Middleware::ParseContent
-	my $data = $env->{'restapi.parseddata'} if exists $env->{'restapi.parseddata'};
+	my $data = $env->{'parsecontent.data'} if exists $env->{'parsecontent.data'};
 
 	my $ret = $self->$method($env, $id, $data);
 	return $ret;
