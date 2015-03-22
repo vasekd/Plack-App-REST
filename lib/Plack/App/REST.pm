@@ -22,6 +22,8 @@ sub call {
 	# Set params of path
 	my $id = _get_param($env);
 
+	### Set ref to env
+	$env->{'REST.class'} = ref $self;
 	# compatibility with Plack::Middleware::ParseContent
 	my $data = $env->{'parsecontent.data'} if exists $env->{'parsecontent.data'};
 
