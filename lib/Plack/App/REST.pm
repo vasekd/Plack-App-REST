@@ -14,24 +14,26 @@ sub call {
 
 	my $method = $env->{REQUEST_METHOD};
 
-	# Throw an exception if method is not defined
+	### Throw an exception if method is not defined
 	if (!$self->can($method)){
 		HTTP::Exception::405->throw(message=>'Method Not Allowed');
 	}
 
-	# Set params of path
+	### Set params of path
 	my $id = _get_param($env);
 
 	### Set ref to env
 	$env->{'REST.class'} = ref $self;
+
 	# compatibility with Plack::Middleware::ParseContent
 	my $data = $env->{'parsecontent.data'} if exists $env->{'parsecontent.data'};
 
+	### Call method 
 	my $ret = $self->$method($env, $id, $data);
 	return $ret;
 }
 
-# Get last requested path
+### Get last requested path
 sub _get_param {
 	my $env = shift;
 	my $p = $env->{PATH_INFO};
