@@ -2,5 +2,11 @@ Revision history for Plack-App-REST
 
 {{$NEXT}}
 
+0.02  2015-03-24 02:01:02 CET
+	- Rewrited to new easier API
+	- Fixed compatibility with ParseContent
+	- Set called class to ENV 
+	- Added exceptions
+
 0.01  2015-03-18 10:02:55 CET
         - Initial release
