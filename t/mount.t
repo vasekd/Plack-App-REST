@@ -13,17 +13,6 @@ BEGIN {
 	use_ok( 'Plack::App::REST' ) || print "Bail out!\n";
 }
 
-my $make_app = sub {
-    my $name = shift;
-    sub {
-        my $env = shift;
-        my $body = join "|", $name, $env->{SCRIPT_NAME}, $env->{PATH_INFO};
-        return [ 200, [ 'Content-Type' => 'text/plain' ], [ $body ] ];
-    };
-};
-
-my $app1 = $make_app->("app1");
-
 my $urlmap = Plack::App::URLMap->new;
 
 my $app = builder {
@@ -38,19 +27,19 @@ test_psgi app => $app, client => sub {
 	my $res ;
 
 	$res = $cb->(GET "http://localhost/api");
-	is $res->content, 'app/root';
+	is_deeply( [$res->code, $res->headers->as_string, $res->content], [200, '', 'app/root'], 'Test 1' );
 
 	$res = $cb->(GET "http://localhost/api/");
-	is $res->content, 'app/root';
+	is_deeply( [$res->code, $res->headers->as_string, $res->content], [200, '', 'app/root'], 'Test 2' );
 
 	$res = $cb->(GET "http://localhost/api/123");
-	is $res->content, 'app/root1';
+	is_deeply( [$res->code, $res->headers->as_string, $res->content], [200, '', 'app/root1'], 'Test 3' );
 
 	$res = $cb->(GET "http://localhost/api1/test");
-	is $res->content, 'Not Found';
+	is_deeply( [$res->code, $res->headers->as_string, $res->content], [404, "Content-Type: text/plain\n", 'Not Found'], 'Test 4' );
 
 	$res = $cb->(POST "http://localhost/api");
-	is $res->content, 'Method Not Allowed';
+	is_deeply( [$res->code, $res->headers->as_string, $res->content], [405, "Content-Type: text/plain\n", 'Method Not Allowed'], 'Test 5' );
 
 };
 
@@ -63,8 +52,8 @@ sub GET {
 	my ($self, $env, $param, $data) = @_;
 
 	if ($param){
-		return [ 200, [ 'Content-Type' => 'text/plain' ], [ 'app/root1' ] ];
+		return ['app/root1'];
 	}else{
-		return [ 200, [ 'Content-Type' => 'text/plain' ], [ 'app/root' ] ];
+		return ['app/root'];
 	}		
 }

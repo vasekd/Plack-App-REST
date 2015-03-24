@@ -16,7 +16,7 @@ sub call {
 
 	### Throw an exception if method is not defined
 	if (!$self->can($method)){
-		HTTP::Exception::405->throw(message=>'Method Not Allowed');
+		return [405, ['Content-Type', 'text/plain'], ['Method Not Allowed']];
 	}
 
 	### Set params of path
@@ -29,8 +29,8 @@ sub call {
 	my $data = $env->{'parsecontent.data'} if exists $env->{'parsecontent.data'};
 
 	### Call method 
-	my $ret = $self->$method($env, $id, $data);
-	return $ret;
+	my ($ret, $h) = eval{ $self->$method($env, $id, $data) };
+	return [200, ($h||[]), $ret];
 }
 
 ### Get last requested path
@@ -70,7 +70,7 @@ Plack::App::REST - Perl PSGI App that just call http method from object.
 
 	sub POST {
 		my ($self, $env, $param, $data) = @_;
-		return [ 200, [ 'Content-Type' => 'text/plain' ], [ 'app/root' ] ];
+		return [ 'app/root' ];
 	}
 
 =head1 DESCRIPTION
@@ -89,6 +89,8 @@ Each method is called with three params:
 
 =item * Data - Compatibility with Plack::Middleware::ParseContent. Return parsed data as perl structure
 
+Method SHOULD return array with two params (body and header). Body is ref to perl structure, header is an array.
+Header is optional.
 =back
 
 For complete RestAPI in Perl use: 

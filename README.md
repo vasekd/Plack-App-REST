@@ -18,7 +18,7 @@ Plack::App::REST - Perl PSGI App that just call http method from object.
 
         sub POST {
                 my ($self, $env, $param, $data) = @_;
-                return [ 200, [ 'Content-Type' => 'text/plain' ], [ 'app/root' ] ];
+                return [ 'app/root' ];
         }
 
 # DESCRIPTION
