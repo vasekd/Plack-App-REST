@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 our $VERSION = '0.01'; # Set automatically by milla
 
 use parent qw( Plack::Component );
-use HTTP::Exception '4XX';
+use HTTP::Exception;
 
 sub call {
 	my($self, $env) = @_;
@@ -30,6 +30,24 @@ sub call {
 
 	### Call method 
 	my ($ret, $h) = eval{ $self->$method($env, $id, $data) };
+
+	### Parse output
+	if ( my $e = HTTP::Exception->caught ) {
+
+		my @headers = ('Content-Type', 'text/plain');
+		my $code = $e->code;
+
+		if ( $code =~ /^3/ && (my $loc = eval{$e->location}) ) {
+			push( @headers, Location => $loc );
+		}
+
+		$env->{'psgi.errors'}->print( $e );
+		return [ $code, \@headers, [$e->message] ];
+	}elsif($@){
+		$env->{'psgi.errors'}->print( $e );
+		return [ 500, ['Content-Type', 'text/plain'], [$@] ];
+	}
+	
 	return [200, ($h||[]), $ret];
 }
 
@@ -91,6 +109,7 @@ Each method is called with three params:
 
 Method SHOULD return array with two params (body and header). Body is ref to perl structure, header is an array.
 Header is optional.
+
 =back
 
 For complete RestAPI in Perl use: 

@@ -33,6 +33,9 @@ Each method is called with three params:
 - Params - resource identifier (usually id). /help/123 => return 123
 - Data - Compatibility with Plack::Middleware::ParseContent. Return parsed data as perl structure
 
+    Method SHOULD return array with two params (body and header). Body is ref to perl structure, header is an array.
+    Header is optional.
+
 For complete RestAPI in Perl use: 
 
 - Plack::Middleware::ParseContent
