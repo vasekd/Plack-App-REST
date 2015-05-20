@@ -20,7 +20,8 @@ sub call {
 	}
 
 	### Set params of path
-	my $id = _get_param($env);
+	my $id = _get_params($env);
+	$env->{'rest.ids'} = $id;
 
 	### Set ref to env
 	$env->{'REST.class'} = ref $self;
@@ -29,7 +30,7 @@ sub call {
 	my $data = $env->{'parsecontent.data'} if exists $env->{'parsecontent.data'};
 
 	### Call method 
-	my ($ret, $h) = eval{ $self->$method($env, $id, $data) };
+	my ($ret, $h) = eval{ $self->$method($env, $id->[0], $data) };
 
 	### Parse output
 	if ( my $e = HTTP::Exception->caught ) {
@@ -52,15 +53,17 @@ sub call {
 }
 
 ### Get last requested path
-sub _get_param {
+sub _get_params {
 	my $env = shift;
 	my $p = $env->{PATH_INFO};
 	return if !$p or $p eq '/';
 
 	# get param of uri
 	(my $r = $p) =~ s/\+/ /g;
-	$r =~ m!/(?:([^/]*))!g;
-	return $1;
+	$r =~ s/^\///g;
+
+	my @id = split(/\//, $r);
+	return \@id;
 }
 
 1;
