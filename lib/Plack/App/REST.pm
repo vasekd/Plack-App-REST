@@ -4,7 +4,7 @@ use 5.008_005;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.02'; # Set automatically by milla
+our $VERSION = '0.03'; # Set automatically by milla
 
 use parent qw( Plack::Component );
 use HTTP::Exception;
