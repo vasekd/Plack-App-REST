@@ -27,8 +27,6 @@ test_psgi app => $app, client => sub {
 	my $res ;
 
 	$res = $cb->(GET "http://localhost/api");
-	use Data::Dumper;
-	print STDERR "RES: ".Dumper($res);
 	is_deeply( [$res->code, $res->headers->as_string, $res->content], [200, '', 'app/root'], 'Test 1' );
 
 	$res = $cb->(GET "http://localhost/api/");
