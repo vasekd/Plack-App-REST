@@ -45,7 +45,9 @@ use parent qw(Plack::App::REST);
 use HTTP::Exception;
 
 sub GET {
-	my ($self, $env, $param, $data) = @_;
+	my ($self, $env, $data) = @_;
+
+	my ($param) = @{$env->{'rest.ids'}};
 
 	if ($param && $param eq 'test'){
 		HTTP::Exception::404->throw(message=>"Not Found");

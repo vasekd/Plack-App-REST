@@ -17,7 +17,7 @@ Plack::App::REST - Perl PSGI App that just call http method from object.
         use parent 'Plack::App::REST';
 
         sub POST {
-                my ($self, $env, $param, $data) = @_;
+                my ($self, $env, $data) = @_;
                 return [ 'app/root' ];
         }
 
@@ -30,7 +30,6 @@ Method can be GET, PUT, POST, DELETE, HEAD, PATCH.
 Each method is called with three params:
 
 - Env - Plack Env
-- Params - resource identifier (usually id). /help/123 => return 123
 - Data - Compatibility with Plack::Middleware::ParseContent. Return parsed data as perl structure
 
     Method SHOULD return array with two params (body and header). Body is ref to perl structure, header is an array.

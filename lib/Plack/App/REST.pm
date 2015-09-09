@@ -30,7 +30,7 @@ sub call {
 	my $data = $env->{'parsecontent.data'} if exists $env->{'parsecontent.data'};
 
 	### Call method 
-	my ($ret, $h) = eval{ $self->$method($env, $id->[0], $data) };
+	my ($ret, $h) = eval{ $self->$method($env, $data) };
 
 	### Parse output
 	if ( my $e = HTTP::Exception->caught ) {
@@ -90,7 +90,7 @@ Plack::App::REST - Perl PSGI App that just call http method from object.
 	use parent 'Plack::App::REST';
 
 	sub POST {
-		my ($self, $env, $param, $data) = @_;
+		my ($self, $env, $data) = @_;
 		return [ 'app/root' ];
 	}
 
@@ -105,8 +105,6 @@ Each method is called with three params:
 =over 4
 
 =item * Env - Plack Env
-
-=item * Params - resource identifier (usually id). /help/123 => return 123
 
 =item * Data - Compatibility with Plack::Middleware::ParseContent. Return parsed data as perl structure
 
