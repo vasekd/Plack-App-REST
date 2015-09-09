@@ -2,6 +2,9 @@ Revision history for Plack-App-REST
 
 {{$NEXT}}
 
+0.04  2015-09-09 09:28:33 CEST
+	- Removed parametr "params" from method call
+
 0.03  2015-05-20 19:00:07 CEST
 	- Set all URL params to env (not just first)
 
