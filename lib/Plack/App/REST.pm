@@ -117,9 +117,9 @@ For complete RestAPI in Perl use:
 
 =over 4
 
-=item * Plack::Middleware::ParseContent
+=item * L<Plack::Middleware::ParseContent>
 
-=item * Plack::Middleware::FormatOutput
+=item * L<Plack::Middleware::FormatOutput>
 
 =back
 
